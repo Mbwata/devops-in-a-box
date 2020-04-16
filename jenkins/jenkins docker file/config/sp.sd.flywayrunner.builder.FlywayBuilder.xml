@@ -1,0 +1,20 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<sp.sd.flywayrunner.builder.FlywayBuilder_-StepDescriptor plugin="flyway-runner@1.9">
+  <installations>
+    <sp.sd.flywayrunner.installation.FlywayInstallation>
+      <name>Flyway1</name>
+      <home></home>
+      <properties>
+        <hudson.tools.InstallSourceProperty>
+          <installers>
+            <sp.sd.flywayrunner.installation.FlywayInstaller>
+              <id>6.3.3nojre</id>
+              <databaseDriverUrl></databaseDriverUrl>
+            </sp.sd.flywayrunner.installation.FlywayInstaller>
+          </installers>
+        </hudson.tools.InstallSourceProperty>
+      </properties>
+      <flywayHome></flywayHome>
+    </sp.sd.flywayrunner.installation.FlywayInstallation>
+  </installations>
+</sp.sd.flywayrunner.builder.FlywayBuilder_-StepDescriptor>

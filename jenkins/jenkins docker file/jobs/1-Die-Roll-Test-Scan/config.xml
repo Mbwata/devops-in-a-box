@@ -1,0 +1,86 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/Mbwata/die-roll-multi-env.git</url>
+        <credentialsId>Github</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H/2 * * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
+      <flywayCommand>clean</flywayCommand>
+      <installationName>Flyway1</installationName>
+      <url>jdbc:postgresql://die-roll-db:5532/dieroll</url>
+      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <locations>filesystem:${WORKSPACE}/sql</locations>
+      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+    </sp.sd.flywayrunner.builder.FlywayBuilder>
+    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
+      <flywayCommand>migrate</flywayCommand>
+      <installationName>Flyway1</installationName>
+      <url>jdbc:postgresql://die-roll-db:5532/dieroll</url>
+      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <locations>filesystem:${WORKSPACE}/sql</locations>
+      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+    </sp.sd.flywayrunner.builder.FlywayBuilder>
+    <hudson.tasks.Shell>
+      <command>mv -f .env_testing .env
+npm install
+npm test</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.11">
+      <project></project>
+      <properties></properties>
+      <javaOpts></javaOpts>
+      <additionalArguments></additionalArguments>
+      <jdk>(Inherit From Job)</jdk>
+      <task></task>
+    </hudson.plugins.sonar.SonarRunnerBuilder>
+  </builders>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>Die-Roll/2-Die-Roll-Build</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+  </publishers>
+  <buildWrappers>
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.21">
+      <bindings class="empty-list"/>
+    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    <jenkins.plugins.nodejs.NodeJSBuildWrapper plugin="nodejs@1.3.4">
+      <nodeJSInstallationName>Node1</nodeJSInstallationName>
+      <cacheLocationStrategy class="jenkins.plugins.nodejs.cache.DefaultCacheLocationLocator"/>
+    </jenkins.plugins.nodejs.NodeJSBuildWrapper>
+  </buildWrappers>
+</project>
