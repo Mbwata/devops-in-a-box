@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/Mbwata/die-roll-multi-env.git</url>
+        <url>https://github.com/Mbwata/devops-bootcamp.git</url>
         <credentialsId>Github</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -36,22 +36,21 @@
     <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
       <flywayCommand>clean</flywayCommand>
       <installationName>Flyway1</installationName>
-      <url>jdbc:postgresql://die-roll-db:5532/dieroll</url>
-      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <url>jdbc:postgresql://dierolldb:5432/dieroll</url>
+      <commandLineArgs></commandLineArgs>
       <locations>filesystem:${WORKSPACE}/sql</locations>
-      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+      <credentialsId>dierolldb</credentialsId>
     </sp.sd.flywayrunner.builder.FlywayBuilder>
     <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
       <flywayCommand>migrate</flywayCommand>
       <installationName>Flyway1</installationName>
-      <url>jdbc:postgresql://die-roll-db:5532/dieroll</url>
-      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <url>jdbc:postgresql://dierolldb:5432/dieroll</url>
+      <commandLineArgs></commandLineArgs>
       <locations>filesystem:${WORKSPACE}/sql</locations>
-      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+      <credentialsId>dierolldb</credentialsId>
     </sp.sd.flywayrunner.builder.FlywayBuilder>
     <hudson.tasks.Shell>
-      <command>mv -f .env_testing .env
-npm install
+      <command>npm install
 npm test</command>
     </hudson.tasks.Shell>
     <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.11">

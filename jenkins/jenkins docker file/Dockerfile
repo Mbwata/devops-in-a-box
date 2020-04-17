@@ -1,10 +1,23 @@
 FROM jenkins/jenkins:lts
-#COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-#COPY jenkins.yaml /usr/share/jenkins/ref/jenkins.yaml
+
 COPY jobs/ /usr/share/jenkins/ref/jobs/
 COPY secrets/ /usr/share/jenkins/ref/secrets/
-COPY config/* /usr/share/jenkins/ref/
-#run ls -l /var/jenkins_home/jobs
-#run chmod 777 -R var/jenkins_home/jobs
+COPY configs/* /usr/share/jenkins/ref/
+
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-#ADD 3-Die-Roll-Deploy-Dev /var/jenkins_home/jobs/3-Die-Roll-Deploy-Dev
+
+USER root
+
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl \
+    && chmod +x ./kubectl \
+    && mv ./kubectl /usr/local/bin/kubectl \
+    && mkdir -p /var/jenkins_home/.kube
+
+RUN wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_18.09.7~3-0~ubuntu-bionic_amd64.deb \
+    && dpkg -i ./docker-ce-cli_18.09.7~3-0~ubuntu-bionic_amd64.deb \
+    && apt-get update \
+    && apt-get install -y awscli
+
+COPY linux-amd64/helm /usr/local/bin/helm
+
+COPY config /var/jenkins_home/.kube/config

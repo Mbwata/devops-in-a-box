@@ -1,0 +1,42 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
+      <flywayCommand>clean</flywayCommand>
+      <installationName>Flyway1</installationName>
+      <url>jdbc:postgresql://die-roll-db.die-roll-dev:5432/dieroll</url>
+      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <locations>filesystem:${WORKSPACE}/sql</locations>
+      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+    </sp.sd.flywayrunner.builder.FlywayBuilder>
+    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
+      <flywayCommand>clean</flywayCommand>
+      <installationName>Flyway1</installationName>
+      <url>jdbc:postgresql://die-roll-db.die-roll-test:5432/dieroll</url>
+      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <locations>filesystem:${WORKSPACE}/sql</locations>
+      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+    </sp.sd.flywayrunner.builder.FlywayBuilder>
+    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
+      <flywayCommand>clean</flywayCommand>
+      <installationName>Flyway1</installationName>
+      <url>jdbc:postgresql://die-roll-db.die-roll-prod:5432/dieroll</url>
+      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <locations>filesystem:${WORKSPACE}/sql</locations>
+      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+    </sp.sd.flywayrunner.builder.FlywayBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

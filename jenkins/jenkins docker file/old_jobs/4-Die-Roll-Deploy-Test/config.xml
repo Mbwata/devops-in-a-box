@@ -1,0 +1,69 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>Version</name>
+          <description></description>
+          <defaultValue>latest</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/Mbwata/die-roll-multi-env.git</url>
+        <credentialsId>b7229c8d-7d5a-499b-9a0b-f375fad9fbe6</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
+      <flywayCommand>migrate</flywayCommand>
+      <installationName>Flyway1</installationName>
+      <url>jdbc:postgresql://die-roll-db.die-roll-test:5432/dieroll</url>
+      <commandLineArgs>-schemas=dieroll</commandLineArgs>
+      <locations>filesystem:${WORKSPACE}/sql</locations>
+      <credentialsId>75a61263-932f-4673-809c-13a3aab46230</credentialsId>
+    </sp.sd.flywayrunner.builder.FlywayBuilder>
+    <hudson.tasks.Shell>
+      <command>cd helm
+helm upgrade die-roll . --debug --set image.tag=${Version},metadata.namespace=die-roll-test,service.port=9393,service.externalport=9393
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.21">
+      <bindings>
+        <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+          <credentialsId>8c341097-9a62-41c7-a24e-f8cc306f6b16</credentialsId>
+          <usernameVariable>dockeruser</usernameVariable>
+          <passwordVariable>dockerpw</passwordVariable>
+        </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+      </bindings>
+    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+  </buildWrappers>
+</project>
