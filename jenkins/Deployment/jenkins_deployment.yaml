@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: deploy-jenkins
+    release: v1
+spec:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-jenkins
+      release: v1
+  template:
+    metadata:
+      labels:
+        app: deploy-jenkins
+        release: v1
+    spec:
+      containers:
+      - image: housems/diab_jenkins
+        imagePullPolicy: Always
+        name: deploy-jenkins
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+         - mountPath: /var/run/docker.sock
+           name: docker-sock
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
