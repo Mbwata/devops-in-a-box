@@ -25,44 +25,11 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.SCMTrigger>
-      <spec>H/2 * * * *</spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
-      <flywayCommand>clean</flywayCommand>
-      <installationName>Flyway1</installationName>
-      <url>jdbc:postgresql://dierolldb:5432/dieroll</url>
-      <commandLineArgs></commandLineArgs>
-      <locations>filesystem:${WORKSPACE}/sql</locations>
-      <credentialsId>dierolldb</credentialsId>
-    </sp.sd.flywayrunner.builder.FlywayBuilder>
-    <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
-      <flywayCommand>migrate</flywayCommand>
-      <installationName>Flyway1</installationName>
-      <url>jdbc:postgresql://dierolldb:5432/dieroll</url>
-      <commandLineArgs></commandLineArgs>
-      <locations>filesystem:${WORKSPACE}/sql</locations>
-      <credentialsId>dierolldb</credentialsId>
-    </sp.sd.flywayrunner.builder.FlywayBuilder>
     <hudson.tasks.Shell>
-      <command>npm install
-npm test</command>
-    </hudson.tasks.Shell>
-    <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.11">
-      <project></project>
-      <properties></properties>
-      <javaOpts></javaOpts>
-      <additionalArguments></additionalArguments>
-      <jdk>(Inherit From Job)</jdk>
-      <task></task>
-    </hudson.plugins.sonar.SonarRunnerBuilder>
-    <hudson.tasks.Shell>
-      <command>docker login nexus-repo.diab-nexus:8082 -u ${nexusruser} -p ${nexuspw}
+      <command>docker login diab-nexus:8082 -u ${nexususer} -p ${nexuspw}
 
 #docker build -t nexus-repo.localhost/die-roll:latest .
 #docker tag nexus-repo.localhost/die-roll:latest nexus-repo.localhost/die-roll:v${BUILD_NUMBER}
@@ -71,17 +38,7 @@ npm test</command>
 #docker push nexus-repo.localhost/die-roll:v${BUILD_NUMBER}</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.BuildTrigger>
-      <childProjects>Die-Roll/2-Die-Roll-Build</childProjects>
-      <threshold>
-        <name>SUCCESS</name>
-        <ordinal>0</ordinal>
-        <color>BLUE</color>
-        <completeBuild>true</completeBuild>
-      </threshold>
-    </hudson.tasks.BuildTrigger>
-  </publishers>
+  <publishers/>
   <buildWrappers>
     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.21">
       <bindings>

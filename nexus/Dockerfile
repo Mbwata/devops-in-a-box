@@ -5,3 +5,4 @@ USER nexus
 #RUN rm -r /nexus-data/db/security
 COPY backups/* /nexus-data/restore-from-backup/
 COPY backups/* /x/
+EXPOSE 8082
