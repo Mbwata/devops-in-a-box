@@ -332,7 +332,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins
-  namespace: jenkins
+  namespace: {{ .Values.metadata.jenkins_namespace }}
   labels:
     app: deploy-jenkins
     release: v1
@@ -381,7 +381,7 @@ spec:
     kind: Ingress
     metadata:
       name: jenkins
-      namespace: jenkins
+      namespace: {{ .Values.metadata.jenkins_namespace }}
       annotations:
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
@@ -412,7 +412,7 @@ spec:
     kind: Service
     metadata:
       name: jenkins
-      namespace: jenkins
+      namespace: {{ .Values.metadata.jenkins_namespace }}
     spec:
       ports:
         - port: 80
@@ -482,82 +482,4 @@ spec:
             value: sketch
           - name: POSTGRES_PASSWORD
             value: passord
-
----
-  
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: sonarqube
-  labels:
-    app.kubernetes.io/name: sonarqube
-    app.kubernetes.io/part-of: sonarqube  
-
----
-  
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: sonarqube
-  namespace: sonarqube
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: sonarqube
-    spec:
-      containers:
-      - image: sonarqube   
-        imagePullPolicy: Always
-        name: sonarqube                
-        ports:
-        - containerPort: 9000
-        
----
-  
-apiVersion: v1
-kind: Service
-metadata:
-  name: sonarqube
-  namespace: sonarqube
-spec:
-  ports:
-    - port: 80
-      targetPort: 9000
-      protocol: TCP
-  type: NodePort
-  selector:
-    app: sonarqube
-    release: v1  
-
----   
-
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: sonarqube
-  namespace: sonarqube
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-  labels:
-    app: sonarqube
-spec:
-  tls:
-  - hosts:
-    - sonarqube.localhost
-    secretName: tls-secret
-  rules:
-  - host: sonarqube.localhost
-    http:
-      paths:
-        - path: /(/|$)(.*)
-          backend:
-            serviceName: sonarqube
-            servicePort: 80
-        - path: /([ ]*)(.*)
-          backend:
-            serviceName: sonarqube
-            servicePort: 80
+             
