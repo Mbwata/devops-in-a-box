@@ -36,7 +36,7 @@
     <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
       <flywayCommand>clean</flywayCommand>
       <installationName>Flyway1</installationName>
-      <url>jdbc:postgresql://dierolldb:5432/dieroll</url>
+      <url>jdbc:postgresql://die-roll-db.dieroll:5432/dieroll</url>
       <commandLineArgs></commandLineArgs>
       <locations>filesystem:${WORKSPACE}/sql</locations>
       <credentialsId>dierolldb</credentialsId>
@@ -44,7 +44,7 @@
     <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
       <flywayCommand>migrate</flywayCommand>
       <installationName>Flyway1</installationName>
-      <url>jdbc:postgresql://dierolldb:5432/dieroll</url>
+      <url>jdbc:postgresql://die-roll-db.dieroll:5432/dieroll</url>
       <commandLineArgs></commandLineArgs>
       <locations>filesystem:${WORKSPACE}/sql</locations>
       <credentialsId>dierolldb</credentialsId>
