@@ -523,7 +523,7 @@ metadata:
   namespace: sonarqube
 spec:
   ports:
-    - port: 80
+    - port: 9000
       targetPort: 9000
       protocol: TCP
   type: NodePort
@@ -556,8 +556,145 @@ spec:
         - path: /(/|$)(.*)
           backend:
             serviceName: sonarqube
-            servicePort: 80
+            servicePort: 9000
         - path: /([ ]*)(.*)
           backend:
             serviceName: sonarqube
-            servicePort: 80
+            servicePort: 9000
+
+---
+
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: nexus
+    labels:
+      app.kubernetes.io/name: nexus
+      app.kubernetes.io/part-of: nexus   
+  
+---
+
+  apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    name: nexus
+    namespace: nexus
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          app: nexus
+      spec:
+        containers:
+        - image: diab_nexus   
+          imagePullPolicy: Always
+          name: nexus
+          volumeMounts:
+           - mountPath: /nexus-data
+             name: nexusdata                   
+          ports:
+          - containerPort: 8081
+        volumes:
+          - name: nexusdata
+            hostPath:
+              path: /Users/mitchconner/docker/volumes/nexus4kubes/nexus-data
+              type: DirectoryOrCreate   
+
+--- 
+  
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: nexus
+    namespace: nexus
+  spec:
+    ports:
+      - port: 80
+        targetPort: 8081
+        protocol: TCP
+    type: NodePort
+    selector:
+      app: nexus
+      release: v1
+      
+---
+  
+  apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: nexus
+    namespace: nexus
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/proxy-body-size: 0m
+    labels:
+      app: nexus
+  spec:
+    tls:
+    - hosts:
+      - nexus.localhost
+      secretName: tls-secret
+    rules:
+    - host: nexus.localhost
+      http:
+        paths:
+          - path: /(/|$)(.*)
+            backend:
+              serviceName: nexus
+              servicePort: 80
+          - path: /([ ]*)(.*)
+            backend:
+              serviceName: nexus
+              servicePort: 80
+              
+---
+  
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: nexus-repo
+    namespace: nexus
+  spec:
+    ports:
+      - port: 81
+        targetPort: 8090
+        protocol: TCP
+    type: NodePort
+    selector:
+      app: nexus
+      release: v1
+      
+---
+  
+  apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: nexus-repo
+    namespace: nexus
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/proxy-body-size: 0m
+    labels:
+      app: nexus
+  spec:
+    tls:
+    - hosts:
+      - nexus-repo.localhost
+      secretName: tls-secret
+    rules:
+    - host: nexus-repo.localhost
+      http:
+        paths:
+          - path: /(/|$)(.*)
+            backend:
+              serviceName: nexus-repo
+              servicePort: 8090
+          - path: /([ ]*)(.*)
+            backend:
+              serviceName: nexus-repo
+              servicePort: 8090  
