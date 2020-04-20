@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-repo
+  namespace: nexus
+spec:
+  ports:
+    - port: 81
+      targetPort: 8090
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: nexus
+    release: v1

@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nexus-repo
+  namespace: nexus
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-body-size: 0m
+  labels:
+    app: nexus
+spec:
+  tls:
+  - hosts:
+    - nexus-repo.localhost
+    secretName: tls-secret
+  rules:
+  - host: nexus-repo.localhost
+    http:
+      paths:
+        - path: /(/|$)(.*)
+          backend:
+            serviceName: nexus-repo
+            servicePort: 8090
+        - path: /([ ]*)(.*)
+          backend:
+            serviceName: nexus-repo
+            servicePort: 8090  
