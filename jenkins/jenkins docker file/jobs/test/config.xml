@@ -28,15 +28,14 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command>docker login nexus-repo.localhost -u ${nexususer} -p ${nexuspw}
-
-#docker build -t nexus-repo.localhost/die-roll:latest .
-#docker tag nexus-repo.localhost/die-roll:latest nexus-repo.localhost/die-roll:v${BUILD_NUMBER}
-
-#docker push nexus-repo.localhost/die-roll:latest
-#docker push nexus-repo.localhost/die-roll:v${BUILD_NUMBER}</command>
-    </hudson.tasks.Shell>
+    <hudson.plugins.sonar.SonarRunnerBuilder plugin="sonar@2.11">
+      <project></project>
+      <properties></properties>
+      <javaOpts></javaOpts>
+      <additionalArguments></additionalArguments>
+      <jdk>(Inherit From Job)</jdk>
+      <task></task>
+    </hudson.plugins.sonar.SonarRunnerBuilder>
   </builders>
   <publishers/>
   <buildWrappers>
