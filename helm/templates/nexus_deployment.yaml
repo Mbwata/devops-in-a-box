@@ -13,14 +13,6 @@ spec:
       containers:
       - image: housems/diab_nexus   
         imagePullPolicy: Always
-        name: nexus
-        volumeMounts:
-         - mountPath: /nexus-data
-           name: nexusdata                   
+        name: nexus                 
         ports:
         - containerPort: 8081
-      volumes:
-        - name: nexusdata
-          hostPath:
-            path: /Users/mitchconner/docker/volumes/nexus4kubes/nexus-data
-            type: DirectoryOrCreate 

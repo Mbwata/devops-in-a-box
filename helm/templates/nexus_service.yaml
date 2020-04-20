@@ -5,10 +5,16 @@ metadata:
   namespace: nexus
 spec:
   ports:
-    - port: 80
+    - port: 9081
       targetPort: 8081
-      protocol: TCP
+      protocol: TCP   
   type: NodePort
   selector:
     app: nexus
-    release: v1
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+status:
+  loadBalancer:
+    ingress:
+      - hostname: localhost
