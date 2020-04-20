@@ -29,7 +29,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>docker login diab-nexus:8082 -u ${nexususer} -p ${nexuspw}
+      <command>docker login nexus-repo.localhost -u ${nexususer} -p ${nexuspw}
 
 #docker build -t nexus-repo.localhost/die-roll:latest .
 #docker tag nexus-repo.localhost/die-roll:latest nexus-repo.localhost/die-roll:v${BUILD_NUMBER}
