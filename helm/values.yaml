@@ -5,6 +5,7 @@
 metadata:
   jenkins_namespace: jenkins
   appVersion: "1.0"
+  nexus_namespace: nexus
 
 # replicas:
 #   replicaCount: 1

@@ -587,7 +587,7 @@ spec:
           app: nexus
       spec:
         containers:
-        - image: diab_nexus   
+        - image: housems/diab_nexus   
           imagePullPolicy: Always
           name: nexus
           volumeMounts:

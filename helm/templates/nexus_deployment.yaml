@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: nexus
-  namespace: nexus
+  namespace: {{ .Values.metadata.nexus_namespace }}
 spec:
   replicas: 1
   template:
