@@ -11,4 +11,10 @@ spec:
   type: NodePort
   selector:
     app: sonarqube
-    release: v1  
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+status:
+  loadBalancer:
+    ingress:
+      - hostname: localhost
