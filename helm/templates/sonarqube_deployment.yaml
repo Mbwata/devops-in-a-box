@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      containers:
+      - image: sonarqube   
+        imagePullPolicy: Always
+        name: sonarqube                
+        ports:
+        - containerPort: 9000

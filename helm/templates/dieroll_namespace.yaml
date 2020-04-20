@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dieroll
+  labels:
+    app.kubernetes.io/name: dieroll
+    app.kubernetes.io/part-of: dieroll   

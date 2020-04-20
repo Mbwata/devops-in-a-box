@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: die-roll-db-deployment
+  namespace: dieroll
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: die-roll-db
+    spec:
+      containers:
+      - image: postgres:12.2
+        imagePullPolicy: Always
+        name: die-roll-db
+        ports:
+        - containerPort: 5432
+        env:
+          - name: POSTGRES_DB
+            value: dieroll
+          - name: POSTGRES_USER
+            value: sketch
+          - name: POSTGRES_PASSWORD
+            value: passord

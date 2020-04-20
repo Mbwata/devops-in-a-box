@@ -62,13 +62,13 @@ npm test</command>
       <task></task>
     </hudson.plugins.sonar.SonarRunnerBuilder>
     <hudson.tasks.Shell>
-      <command>docker login nexus-repo.diab-nexus:8082 -u ${nexusruser} -p ${nexuspw}
+      <command>docker login nexus-repo.localhost -u ${nexususer} -p ${nexuspw}
 
-#docker build -t nexus-repo.localhost/die-roll:latest .
-#docker tag nexus-repo.localhost/die-roll:latest nexus-repo.localhost/die-roll:v${BUILD_NUMBER}
+docker build -t nexus-repo.localhost/dieroll:latest .
+docker tag nexus-repo.localhost/dieroll:latest nexus-repo.localhost/dieroll:v${BUILD_NUMBER}
 
-#docker push nexus-repo.localhost/die-roll:latest
-#docker push nexus-repo.localhost/die-roll:v${BUILD_NUMBER}</command>
+docker push nexus-repo.localhost/dieroll:latest
+docker push nexus-repo.localhost/dieroll:v${BUILD_NUMBER}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
