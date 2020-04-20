@@ -1,7 +1,6 @@
 #!/bin/sh
 
 #docker rm -f diab_nexus
-docker rmi diab_nexus
 docker rmi housems/diab_nexus
 docker build -t housems/diab_nexus .
 docker push housems/diab_nexus
