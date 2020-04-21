@@ -2,3 +2,4 @@
 
 Install docker
 install k8s
+and helm

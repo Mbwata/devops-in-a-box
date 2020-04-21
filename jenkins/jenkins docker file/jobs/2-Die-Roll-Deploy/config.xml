@@ -47,7 +47,8 @@
 
 helm repo update
 
-helm install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll</command>
+helm install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll
+#helm upgrade die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
