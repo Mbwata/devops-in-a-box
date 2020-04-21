@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins
-  namespace: jenkins
+  namespace: {{ .Values.namespaces.jenkins_namespace }}
   labels:
     app: deploy-jenkins
     release: v1

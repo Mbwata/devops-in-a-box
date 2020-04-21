@@ -3,6 +3,8 @@
 # Declare variables to be passed into your templates.
 
 metadata:
-  jenkins_namespace: jenkins
   appVersion: "1.0"
   nexus_namespace: nexus
+
+namespaces:
+  jenkins_namespace: jenkins
