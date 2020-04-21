@@ -6,27 +6,3 @@ metadata:
   jenkins_namespace: jenkins
   appVersion: "1.0"
   nexus_namespace: nexus
-
-# replicas:
-#   replicaCount: 1
-
-# image:
-#   repository: housems/matt_jenkins
-#   tag: "latest"
-#   pullPolicy: Always
-
-# nameOverride: ""
-# fullnameOverride: ""
-
-# service:
-#   type: ClusterIP
-#   port: 8080
-#   internalport: 8080
-#   externalport: 80
-
-# ingress:
-#   enabled: true
-#   path: /*
-#   hosts:
-#     - localhost
-#   tls: []
