@@ -3,7 +3,18 @@
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>Version</name>
+          <description></description>
+          <defaultValue>latest</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
@@ -12,6 +23,17 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
+    <hudson.tasks.Shell>
+      <command>wget --user=${dockeruser} --password=${dockerpw} http://nexus.nexus:9081/repository/dieroll-sql/sql_${Version}.zip</command>
+    </hudson.tasks.Shell>
+    <sp.sd.fileoperations.FileOperationsBuilder plugin="file-operations@1.9">
+      <fileOperations>
+        <sp.sd.fileoperations.FileUnZipOperation>
+          <filePath>${WORKSPACE}/sql_${Version}.zip</filePath>
+          <targetLocation>${WORKSPACE}</targetLocation>
+        </sp.sd.fileoperations.FileUnZipOperation>
+      </fileOperations>
+    </sp.sd.fileoperations.FileOperationsBuilder>
     <sp.sd.flywayrunner.builder.FlywayBuilder plugin="flyway-runner@1.9">
       <flywayCommand>migrate</flywayCommand>
       <installationName>Flyway1</installationName>
@@ -21,46 +43,21 @@
       <credentialsId>dierolldb</credentialsId>
     </sp.sd.flywayrunner.builder.FlywayBuilder>
     <hudson.tasks.Shell>
-      <command>npm install
-npm test</command>
-    </hudson.tasks.Shell>
-    <sp.sd.fileoperations.FileOperationsBuilder plugin="file-operations@1.9">
-      <fileOperations>
-        <sp.sd.fileoperations.FileZipOperation>
-          <folderPath>./sql</folderPath>
-        </sp.sd.fileoperations.FileZipOperation>
-      </fileOperations>
-    </sp.sd.fileoperations.FileOperationsBuilder>
-    <hudson.tasks.Shell>
-      <command>curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_v${BUILD_NUMBER}.zip
-curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_latest.zip</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>helm package helm
-curl -u ${nexususer}:${nexuspw} http://nexus.nexus:9081/repository/dieroll-helm/ --upload-file die-roll-1.0.0.tgz -v</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>docker login nexus-repo.localhost -u ${nexususer} -p ${nexuspw}
+      <command>helm repo add nexus http://nexus.nexus:9081/repository/dieroll-helm/
 
-docker build -t nexus-repo.localhost/dieroll:latest .
-docker tag nexus-repo.localhost/dieroll:latest nexus-repo.localhost/dieroll:v${BUILD_NUMBER}
+helm repo update
 
-docker push nexus-repo.localhost/dieroll:latest
-docker push nexus-repo.localhost/dieroll:v${BUILD_NUMBER}</command>
+helm install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.BuildTrigger>
-      <childProjects>Die-Roll/2-Die-Roll-Build</childProjects>
-      <threshold>
-        <name>SUCCESS</name>
-        <ordinal>0</ordinal>
-        <color>BLUE</color>
-        <completeBuild>true</completeBuild>
-      </threshold>
-    </hudson.tasks.BuildTrigger>
-  </publishers>
+  <publishers/>
   <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
+      <deleteDirs>false</deleteDirs>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.21">
       <bindings>
         <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
