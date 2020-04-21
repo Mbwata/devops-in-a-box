@@ -105,7 +105,7 @@ docker push nexus-repo.localhost/dieroll:v${BUILD_NUMBER}</command>
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
-    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.21">
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.22">
       <bindings>
         <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
           <credentialsId>nexus</credentialsId>
@@ -114,7 +114,7 @@ docker push nexus-repo.localhost/dieroll:v${BUILD_NUMBER}</command>
         </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
       </bindings>
     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
-    <jenkins.plugins.nodejs.NodeJSBuildWrapper plugin="nodejs@1.3.4">
+    <jenkins.plugins.nodejs.NodeJSBuildWrapper plugin="nodejs@1.3.5">
       <nodeJSInstallationName>Node1</nodeJSInstallationName>
       <cacheLocationStrategy class="jenkins.plugins.nodejs.cache.DefaultCacheLocationLocator"/>
     </jenkins.plugins.nodejs.NodeJSBuildWrapper>
