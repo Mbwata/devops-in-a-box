@@ -1,7 +1,0 @@
-workflow-aggregator:latest
-blueocean:latest
-pipeline-maven:latest
-configuration-as-code-support:latest
-job-dsl:latest
-nodejs:latest
-flyway-runner:latest
