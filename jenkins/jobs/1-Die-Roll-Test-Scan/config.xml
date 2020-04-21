@@ -74,7 +74,9 @@ curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>helm package helm
-curl -u ${nexususer}:${nexuspw} http://nexus.nexus:9081/repository/dieroll-helm/ --upload-file die-roll-1.0.0.tgz -v</command>
+CHART=$(find . -name die-roll-*.tgz)
+
+curl -u ${nexususer}:${nexuspw} http://nexus.nexus:9081/repository/dieroll-helm/ --upload-file $CHART -v</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>docker login nexus-repo.localhost -u ${nexususer} -p ${nexuspw}
@@ -105,6 +107,12 @@ docker push nexus-repo.localhost/dieroll:v${BUILD_NUMBER}</command>
     </hudson.plugins.parameterizedtrigger.BuildTrigger>
   </publishers>
   <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.38">
+      <deleteDirs>false</deleteDirs>
+      <cleanupParameter></cleanupParameter>
+      <externalDelete></externalDelete>
+      <disableDeferredWipeout>false</disableDeferredWipeout>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.22">
       <bindings>
         <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
