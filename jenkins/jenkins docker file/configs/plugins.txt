@@ -22,3 +22,4 @@ nodejs:1.3.4
 flyway-runner:1.9
 sonar:2.11
 file-operations:1.9
+parameterized-trigger:2.36
