@@ -1,10 +1,10 @@
-FROM jenkins/jenkins:lts
+FROM cloudbees/cloudbees-jenkins-distribution
 
-COPY jobs/ /usr/share/jenkins/ref/jobs/
-COPY secrets/ /usr/share/jenkins/ref/secrets/
-COPY configs/* /usr/share/jenkins/ref/
+COPY jobs/ /usr/share/cloudbees-jenkins-distribution/ref/jobs/
+COPY secrets/ /usr/share/cloudbees-jenkins-distribution/ref/secrets/
+COPY configs/* /usr/share/cloudbees-jenkins-distribution/ref/
 
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/cloudbees-jenkins-distribution/ref/plugins.txt
 
 USER root
 
