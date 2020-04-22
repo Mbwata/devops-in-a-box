@@ -30,6 +30,8 @@ spec:
         volumeMounts:
          - mountPath: /var/run/docker.sock
            name: docker-sock
+         - mountPath: /var/jenkins_home
+           name: jenkins-home
         ports:
         - containerPort: 8080
       volumes:
@@ -37,3 +39,7 @@ spec:
           hostPath:
             path: /var/run/docker.sock
             type: Socket
+        - name: jenkins-home
+          hostPath:
+            path: /var/lib/docker/volumes/jenkins4kubes/jenkins_home
+            type: DirectoryOrCreate
