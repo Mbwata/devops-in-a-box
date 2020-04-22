@@ -28,9 +28,24 @@
             fileOperations([fileZipOperation(&apos;./sql&apos;)])
             
             sh label: &apos;&apos;, script: &apos;&apos;&apos;curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_v${BUILD_NUMBER}.zip
-            curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_latest.zip&apos;&apos;&apos;
-            
-            build job: &apos;dev-deployment&apos;, parameters: [string(name: &apos;Version&apos;, value: &apos;v&apos;+ env.BUILD_NUMBER)]
+            curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_latest.zip
+            helm package helm
+            CHART=$(find . -name die-roll-*.tgz)
+            curl -u ${nexususer}:${nexuspw} http://nexus.nexus:9081/repository/dieroll-helm/ --upload-file $CHART -v&apos;&apos;&apos;
+        }
+   }
+   stage(&apos;Deploy&apos;) {
+        cleanWs()
+        withCredentials([usernamePassword(credentialsId: &apos;nexus&apos;, passwordVariable: &apos;nexuspw&apos;, usernameVariable: &apos;nexususer&apos;)]) {
+        sh label: &apos;&apos;, script: &apos;&apos;&apos;wget --user=${nexususer} --password=${nexuspw} http://nexus.nexus:9081/repository/dieroll-sql/sql_v${BUILD_NUMBER}.zip&apos;&apos;&apos;
+        
+        fileOperations([fileUnZipOperation(filePath: &apos;sql_v${BUILD_NUMBER}.zip&apos;, targetLocation: &apos;./&apos;)])
+        flywayrunner commandLineArgs: &apos;&apos;, credentialsId: &apos;dierolldb&apos;, flywayCommand: &apos;migrate&apos;, installationName: &apos;Flyway1&apos;, locations: &apos;filesystem:&apos; + env.WORKSPACE + &apos;/sql&apos;, url: &apos;jdbc:postgresql://die-roll-db.dieroll:5432/dieroll&apos;
+
+        sh label: &apos;&apos;, script: &apos;&apos;&apos;helm repo add nexus http://nexus.nexus:9081/repository/dieroll-helm/
+        helm repo update
+        helm upgrade die-roll nexus/die-roll --debug --set image.tag=v${BUILD_NUMBER},metadata.namespace=dieroll&apos;&apos;&apos;
+
         }
    }
 }
