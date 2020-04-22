@@ -44,7 +44,17 @@
 
         sh label: &apos;&apos;, script: &apos;&apos;&apos;helm repo add nexus http://nexus.nexus:9081/repository/dieroll-helm/
         helm repo update
-        helm upgrade die-roll nexus/die-roll --debug --set image.tag=v${BUILD_NUMBER},metadata.namespace=dieroll&apos;&apos;&apos;
+        
+        CHECK=$(helm list --filter die-roll -q)
+
+        if test -z $CHECK
+        then
+           ACTION=&quot;install&quot;
+        else
+           ACTION=&quot;upgrade&quot;
+        fi
+        
+        helm $ACTION die-roll nexus/die-roll --debug --set image.tag=v${BUILD_NUMBER},metadata.namespace=dieroll&apos;&apos;&apos;
 
         }
    }
