@@ -8,3 +8,8 @@ metadata:
 
 namespaces:
   jenkins_namespace: jenkins
+
+volumes:
+  jenkins:
+    path: /var/lib/docker/volumes/diab/jenkins/jenkins_home
+    type: DirectoryOrCreate
