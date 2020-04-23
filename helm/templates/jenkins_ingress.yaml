@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jenkins
-  namespace: {{ .Values.namespaces.jenkins_namespace }}
+  namespace: {{ .Values.jenkins.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
@@ -12,10 +12,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.namespaces.jenkins_namespace }}.localhost
+    - {{ .Values.jenkins.namespace }}.localhost
     secretName: tls-secret
   rules:
-  - host: {{ .Values.namespaces.jenkins_namespace }}.localhost
+  - host: {{ .Values.jenkins.namespace }}.localhost
     http:
       paths:
         - path: /(/|$)(.*)

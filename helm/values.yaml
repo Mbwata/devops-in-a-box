@@ -6,10 +6,10 @@ metadata:
   appVersion: "1.0"
   nexus_namespace: nexus
 
-namespaces:
-  jenkins_namespace: jenkins
-
-volumes:
-  jenkins:
-    path: /var/lib/docker/volumes/diab/jenkins/jenkins_home
+jenkins:
+  namespace: jenkins
+  volumes:
+    #path: /var/lib/docker/volumes/diab_jenkins/jenkins_home
+    #path: /var/lib/docker/volumes/diab/jenkins/jenkins_home
+    path: /var/lib/docker/volumes/jenkins4kubes/jenkins_home
     type: DirectoryOrCreate
