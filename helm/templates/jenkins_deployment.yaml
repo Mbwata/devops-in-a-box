@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins
-  namespace: {{ .Values.namespaces.jenkins_namespace }}
+  namespace: {{ .Values.jenkins.namespace }}
   labels:
     app: deploy-jenkins
     release: v1
@@ -41,5 +41,5 @@ spec:
             type: Socket
         - name: jenkins-home
           hostPath:
-            path: {{ .Values.volumes.jenkins.path }}
-            type: {{ .Values.volumes.jenkins.type }}
+            path: {{ .Values.jenkins.volumes.path }}
+            type: {{ .Values.jenkins.volumes.type }}
