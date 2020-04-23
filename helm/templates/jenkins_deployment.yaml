@@ -22,7 +22,7 @@ spec:
         release: v1
     spec:
       containers:
-      - image: housems/diab_jenkins
+      - image: {{ .Values.jenkins.image }}
         imagePullPolicy: Always
         name: deploy-jenkins
         ports:
