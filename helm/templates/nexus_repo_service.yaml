@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nexus-repo
-  namespace: nexus
+  namespace: {{ .Values.nexus.namespace }}
 spec:
   ports:
     - port: 8090

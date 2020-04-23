@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: nexus
-  namespace: nexus
+  namespace: {{ .Values.nexus.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/proxy-body-size: 0m
@@ -10,7 +10,7 @@ metadata:
     app: nexus
 spec:
   rules:
-  - host: nexus.local
+  - host: {{ .Values.nexus.namespace }}.local
     http:
       paths:
         - path: /([ ]*)(.*)
