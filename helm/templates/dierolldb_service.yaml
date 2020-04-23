@@ -11,10 +11,3 @@ spec:
   type: NodePort
   selector:
     app: die-roll-db
-  type: LoadBalancer
-  sessionAffinity: None
-  externalTrafficPolicy: Cluster
-status:
-  loadBalancer:
-    ingress:
-      - hostname: localhost
