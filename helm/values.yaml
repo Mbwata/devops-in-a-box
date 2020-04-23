@@ -15,3 +15,7 @@ jenkins:
   volumes:
     path: /var/lib/docker/volumes/diab_jenkins/_data
     type: DirectoryOrCreate
+
+nexus:
+  namespace: nexus
+  image: housems/diab_nexus
