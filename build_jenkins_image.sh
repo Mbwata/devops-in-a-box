@@ -6,4 +6,3 @@ docker build -t housems/diab_jenkins:halfbaked -f ./jenkins/Dockerfile.halfbaked
 docker build -t housems/diab_jenkins:fullybaked -f ./jenkins/Dockerfile.fullybaked ./jenkins
 docker push housems/diab_jenkins:halfbaked
 docker push housems/diab_jenkins:fullybaked
-

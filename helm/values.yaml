@@ -8,6 +8,10 @@ metadata:
 
 jenkins:
   namespace: jenkins
+  # This image will preload jobs, plugins, plugin configs, and credentials. 
+  # At some point you will probably want to switch to the :halfbaked tag otherwise 
+  # it will attempt to redeploy those items everytime the container restarts
+  image: housems/diab_jenkins:fullybaked
   volumes:
     path: /var/lib/docker/volumes/diab_jenkins/_data
     type: DirectoryOrCreate
