@@ -14,8 +14,11 @@
         nodejs(&apos;Node1&apos;) {
             sh label: &apos;&apos;, script: &apos;&apos;&apos;npm install
             npm test&apos;&apos;&apos;
-            sh label: &apos;&apos;, script: &apos;/var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/Scanner1/bin/sonar-scanner -Dsonar.host.url=http://sonarqube.sonarqube:9000 -Dsonar.projectBaseDir=&apos;+ env.WORKSPACE
         }
+        def scannerHome = tool &apos;Scanner1&apos;;
+        withSonarQubeEnv {
+        sh &quot;${scannerHome}/bin/sonar-scanner&quot;
+        }  
    }
    stage(&apos;Push to repos&apos;) {
         withCredentials([usernamePassword(credentialsId: &apos;nexus&apos;, passwordVariable: &apos;nexuspw&apos;, usernameVariable: &apos;nexususer&apos;)]) {
