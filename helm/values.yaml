@@ -9,7 +9,5 @@ metadata:
 jenkins:
   namespace: jenkins
   volumes:
-    #path: /var/lib/docker/volumes/diab_jenkins/jenkins_home
-    #path: /var/lib/docker/volumes/diab/jenkins/jenkins_home
-    path: /var/lib/docker/volumes/jenkins4kubes/jenkins_home
+    path: /var/lib/docker/volumes/diab_jenkins/_data
     type: DirectoryOrCreate
