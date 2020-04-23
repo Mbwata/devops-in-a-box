@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: nexus
-  namespace: nexus
+  namespace: {{ .Values.nexus.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
@@ -13,10 +13,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - nexus.localhost
+    - {{ .Values.nexus.namespace }}.localhost
     secretName: tls-secret
   rules:
-  - host: nexus.localhost
+  - host: {{ .Values.nexus.namespace }}.localhost
     http:
       paths:
         - path: /(/|$)(.*)
