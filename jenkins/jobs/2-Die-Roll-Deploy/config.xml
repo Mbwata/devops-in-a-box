@@ -47,16 +47,7 @@
 
 helm repo update
 
-CHECK=$(helm list --filter die-roll -q)
-
-if test -z $CHECK
-then
-ACTION=&quot;install&quot;
-else
-ACTION=&quot;upgrade&quot;
-fi
-
-helm ${ACTION} die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll
+helm upgrade --install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll
 </command>
     </hudson.tasks.Shell>
   </builders>
