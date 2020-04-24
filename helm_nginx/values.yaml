@@ -1,7 +1,0 @@
-# Default values for matts jenkins.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-#Matt needs to update this
-
-metadata:
-  appVersion: "1.0"
