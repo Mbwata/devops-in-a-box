@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+  labels:
+    app.kubernetes.io/name: sonarqube
+    app.kubernetes.io/part-of: sonarqube
+spec:
+  limits:
+  - max:
+      memory: 60Mi
+      cpu: 100m
+    type: Container
