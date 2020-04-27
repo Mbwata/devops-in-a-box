@@ -9,6 +9,6 @@ metadata:
 spec:
   limits:
   - max:
-      memory: 30Mi
+      memory: 250Mi
       cpu: 150m
     type: Container
