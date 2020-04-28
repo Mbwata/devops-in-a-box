@@ -4,7 +4,6 @@
 
 metadata:
   appVersion: "1.0"
-  nexus_namespace: nexus
 
 jenkins:
   namespace: jenkins
@@ -19,6 +18,9 @@ jenkins:
 nexus:
   namespace: nexus
   image: housems/diab_nexus
+  volumes:
+    path: /var/lib/docker/volumes/diab_nexus/_data
+    type: DirectoryOrCreate
 
 dierolldb:
   namespace: dieroll

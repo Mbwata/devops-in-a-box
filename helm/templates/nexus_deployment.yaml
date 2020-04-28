@@ -13,6 +13,14 @@ spec:
       containers:
       - image: {{ .Values.nexus.image }}  
         imagePullPolicy: Always
-        name: nexus                 
+        name: nexus
+        volumeMounts:
+         - mountPath: /nexus-data
+           name: nexusdata                   
         ports:
         - containerPort: 8081
+      volumes:
+        - name: nexusdata
+          hostPath:
+            path: {{ .Values.nexus.volumes.path }}
+            type: {{ .Values.nexus.volumes.type }}    
