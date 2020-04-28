@@ -23,3 +23,6 @@ nexus:
 dierolldb:
   namespace: dieroll
   image: postgres:12.2
+  volumes:
+    path: /var/lib/docker/volumes/diab_postgres/_data
+    type: DirectoryOrCreate

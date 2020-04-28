@@ -22,4 +22,12 @@ spec:
           - name: POSTGRES_USER
             value: sketch
           - name: POSTGRES_PASSWORD
-            value: passord
+            value: passord        
+        volumeMounts:
+         - mountPath: "/var/lib/postgresql/data"
+           name: dierolldata
+      volumes:
+        - name: dierolldata
+          hostPath:
+            path: {{ .Values.dierolldb.volumes.path }}
+            type: {{ .Values.dierolldb.volumes.type }}
