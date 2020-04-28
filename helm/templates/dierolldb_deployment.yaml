@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: die-roll-db-deployment
-  namespace: dieroll
+  namespace: {{ .Values.dierolldb.namespace }}
 spec:
   replicas: 1
   template:
@@ -11,7 +11,7 @@ spec:
         app: die-roll-db
     spec:
       containers:
-      - image: postgres:12.2
+      - image: {{ .Values.dierolldb.image }}
         imagePullPolicy: Always
         name: die-roll-db
         ports:

@@ -19,3 +19,7 @@ jenkins:
 nexus:
   namespace: nexus
   image: housems/diab_nexus
+
+dierolldb:
+  namespace: dieroll
+  image: postgres:12.2
