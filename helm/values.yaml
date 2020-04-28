@@ -28,3 +28,7 @@ dierolldb:
   volumes:
     path: /var/lib/docker/volumes/diab_postgres/_data
     type: DirectoryOrCreate
+
+sonarqube:
+  namespace: sonarqube
+  image: sonarqube   
