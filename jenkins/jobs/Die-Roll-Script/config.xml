@@ -8,7 +8,7 @@
     <script>node {
    stage(&apos;Build,Test,and Scan&apos;) { // for display purposes
       // Get some code from a GitHub repository
-        git branch: &apos;master&apos;, credentialsId: &apos;Github&apos;, url: &apos;https://github.com/Mbwata/devops-bootcamp.git&apos;
+        git branch: &apos;master&apos;, credentialsId: &apos;Github&apos;, url: &apos;https://github.com/Matt-Sketch/dieroll.git&apos;
         flywayrunner commandLineArgs: &apos;&apos;, credentialsId: &apos;dierolldb&apos;, flywayCommand: &apos;clean&apos;, installationName: &apos;Flyway1&apos;, locations: &apos;filesystem:&apos; + env.WORKSPACE + &apos;/sql&apos;, url: &apos;jdbc:postgresql://die-roll-db.dieroll:5432/dieroll&apos;
         flywayrunner commandLineArgs: &apos;&apos;, credentialsId: &apos;dierolldb&apos;, flywayCommand: &apos;migrate&apos;, installationName: &apos;Flyway1&apos;, locations: &apos;filesystem:&apos; + env.WORKSPACE + &apos;/sql&apos;, url: &apos;jdbc:postgresql://die-roll-db.dieroll:5432/dieroll&apos;
         nodejs(&apos;Node1&apos;) {
