@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/Mbwata/devops-bootcamp.git</url>
+        <url>https://github.com/Matt-Sketch/dieroll.git</url>
         <credentialsId>Github</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
