@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: die-roll-db
+  namespace: dieroll
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  labels:
+    app: die-roll-db
+spec:
+  tls:
+  - hosts:
+    - dierolldb.localhost
+    secretName: tls-secret
+  rules:
+  - host: dierolldb.localhost
+    http:
+      paths:
+        - path: /(/|$)(.*)
+          backend:
+            serviceName: dierolldb
+            servicePort: 5432
+        - path: /([ ]*)(.*)
+          backend:
+            serviceName: dierolldb
+            servicePort: 5432
