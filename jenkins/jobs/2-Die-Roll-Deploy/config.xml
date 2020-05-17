@@ -47,8 +47,8 @@
 
 helm repo update
 
-helm install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll
-#helm upgrade die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll</command>
+helm upgrade --install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata.namespace=dieroll
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
@@ -59,7 +59,7 @@ helm install die-roll nexus/die-roll --debug --set image.tag=${Version},metadata
       <externalDelete></externalDelete>
       <disableDeferredWipeout>false</disableDeferredWipeout>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
-    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.22">
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.23">
       <bindings>
         <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
           <credentialsId>nexus</credentialsId>

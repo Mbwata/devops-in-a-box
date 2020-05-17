@@ -1,0 +1,60 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.39">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.80">
+    <script>node {
+   stage(&apos;Build,Test,and Scan&apos;) { // for display purposes
+      // Get some code from a GitHub repository
+        git branch: &apos;master&apos;, credentialsId: &apos;Github&apos;, url: &apos;https://github.com/Matt-Sketch/dieroll.git&apos;
+        flywayrunner commandLineArgs: &apos;&apos;, credentialsId: &apos;dierolldb&apos;, flywayCommand: &apos;clean&apos;, installationName: &apos;Flyway1&apos;, locations: &apos;filesystem:&apos; + env.WORKSPACE + &apos;/sql&apos;, url: &apos;jdbc:postgresql://die-roll-db.dieroll:5432/dieroll&apos;
+        flywayrunner commandLineArgs: &apos;&apos;, credentialsId: &apos;dierolldb&apos;, flywayCommand: &apos;migrate&apos;, installationName: &apos;Flyway1&apos;, locations: &apos;filesystem:&apos; + env.WORKSPACE + &apos;/sql&apos;, url: &apos;jdbc:postgresql://die-roll-db.dieroll:5432/dieroll&apos;
+        nodejs(&apos;Node1&apos;) {
+            sh label: &apos;&apos;, script: &apos;&apos;&apos;npm install
+            npm test&apos;&apos;&apos;
+            def scannerHome = tool &apos;Scanner1&apos;;
+            withSonarQubeEnv {
+                sh &quot;${scannerHome}/bin/sonar-scanner&quot;
+            }  
+        }
+   }
+   stage(&apos;Push to repos&apos;) {
+        withCredentials([usernamePassword(credentialsId: &apos;nexus&apos;, passwordVariable: &apos;nexuspw&apos;, usernameVariable: &apos;nexususer&apos;)]) {
+            sh label: &apos;&apos;, script: &apos;&apos;&apos;docker login nexus-repo.localhost -u ${nexususer} -p ${nexuspw}
+            docker build -t nexus-repo.localhost/dieroll:latest .
+            docker tag nexus-repo.localhost/dieroll:latest nexus-repo.localhost/dieroll:v${BUILD_NUMBER}
+            docker push nexus-repo.localhost/dieroll:latest
+            docker push nexus-repo.localhost/dieroll:v${BUILD_NUMBER}&apos;&apos;&apos;
+            
+            fileOperations([fileZipOperation(&apos;./sql&apos;)])
+            
+            sh label: &apos;&apos;, script: &apos;&apos;&apos;curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_v${BUILD_NUMBER}.zip
+            curl -v --user ${nexususer}:${nexuspw} --upload-file sql.zip http://nexus.nexus:9081/repository/dieroll-sql/sql_latest.zip
+            helm package helm
+            CHART=$(find . -name die-roll-*.tgz)
+            curl -u ${nexususer}:${nexuspw} http://nexus.nexus:9081/repository/dieroll-helm/ --upload-file $CHART -v&apos;&apos;&apos;
+        }
+   }
+   stage(&apos;Deploy&apos;) {
+        cleanWs()
+        withCredentials([usernamePassword(credentialsId: &apos;nexus&apos;, passwordVariable: &apos;nexuspw&apos;, usernameVariable: &apos;nexususer&apos;)]) {
+        sh label: &apos;&apos;, script: &apos;&apos;&apos;wget --user=${nexususer} --password=${nexuspw} http://nexus.nexus:9081/repository/dieroll-sql/sql_v${BUILD_NUMBER}.zip&apos;&apos;&apos;
+        
+        fileOperations([fileUnZipOperation(filePath: &apos;sql_v${BUILD_NUMBER}.zip&apos;, targetLocation: &apos;./&apos;)])
+        flywayrunner commandLineArgs: &apos;&apos;, credentialsId: &apos;dierolldb&apos;, flywayCommand: &apos;migrate&apos;, installationName: &apos;Flyway1&apos;, locations: &apos;filesystem:&apos; + env.WORKSPACE + &apos;/sql&apos;, url: &apos;jdbc:postgresql://die-roll-db.dieroll:5432/dieroll&apos;
+
+        sh label: &apos;&apos;, script: &apos;&apos;&apos;helm repo add nexus http://nexus.nexus:9081/repository/dieroll-helm/
+        helm repo update
+        
+        helm upgrade --install die-roll nexus/die-roll --debug --set image.tag=v${BUILD_NUMBER},metadata.namespace=dieroll&apos;&apos;&apos;
+        }
+   }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

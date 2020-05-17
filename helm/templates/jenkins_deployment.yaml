@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins
-  namespace: {{ .Values.namespaces.jenkins_namespace }}
+  namespace: {{ .Values.jenkins.namespace }}
   labels:
     app: deploy-jenkins
     release: v1
@@ -22,7 +22,7 @@ spec:
         release: v1
     spec:
       containers:
-      - image: housems/diab_jenkins
+      - image: {{ .Values.jenkins.image }}
         imagePullPolicy: Always
         name: deploy-jenkins
         ports:
@@ -30,6 +30,8 @@ spec:
         volumeMounts:
          - mountPath: /var/run/docker.sock
            name: docker-sock
+         - mountPath: /var/jenkins_home
+           name: jenkins-home
         ports:
         - containerPort: 8080
       volumes:
@@ -37,3 +39,7 @@ spec:
           hostPath:
             path: /var/run/docker.sock
             type: Socket
+        - name: jenkins-home
+          hostPath:
+            path: {{ .Values.jenkins.volumes.path }}
+            type: {{ .Values.jenkins.volumes.type }}

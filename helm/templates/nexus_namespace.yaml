@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: nexus
+  name: {{ .Values.nexus.namespace }}
   labels:
-    app.kubernetes.io/name: nexus
-    app.kubernetes.io/part-of: nexus
+    app.kubernetes.io/name: {{ .Values.nexus.namespace }}
+    app.kubernetes.io/part-of: {{ .Values.nexus.namespace }}

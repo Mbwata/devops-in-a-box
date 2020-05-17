@@ -1,17 +1,22 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nexus
-  namespace: {{ .Values.metadata.nexus_namespace }}
+  namespace: {{ .Values.nexus.namespace }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+      release: v1
   template:
     metadata:
       labels:
         app: nexus
+        release: v1
     spec:
       containers:
-      - image: housems/diab_nexus   
+      - image: {{ .Values.nexus.image }}  
         imagePullPolicy: Always
         name: nexus                 
         ports:
