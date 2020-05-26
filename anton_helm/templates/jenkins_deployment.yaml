@@ -27,19 +27,3 @@ spec:
         name: deploy-jenkins
         ports:
         - containerPort: 8080
-        volumeMounts:
-         - mountPath: /var/run/docker.sock
-           name: docker-sock
-         - mountPath: /var/jenkins_home
-           name: jenkins-home
-        ports:
-        - containerPort: 8080
-      volumes:
-        - name: docker-sock
-          hostPath:
-            path: /var/run/docker.sock
-            type: Socket
-        - name: jenkins-home
-          hostPath:
-            path: {{ .Values.jenkins.volumes.path }}
-            type: {{ .Values.jenkins.volumes.type }}
