@@ -2,6 +2,8 @@
 
 : "${REF:="/usr/share/jenkins/ref"}"
 
+sudo apt-get install unzip
+
 # compare if version1 < version2
 versionLT() {
     local v1; v1=$(echo "$1" | cut -d '-' -f 1 )

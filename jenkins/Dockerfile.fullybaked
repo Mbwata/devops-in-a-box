@@ -1,7 +1,18 @@
-FROM housems/diab_jenkins:halfbakedarm
+#FROM housems/diab_jenkins:halfbakedarm
+#FROM housems/jenkins-arm:2.222.1
+FROM jenkins-a
+
+USER root
+
+#RUN sudo apt-get install unzip
 
 COPY jobs/ /usr/share/jenkins/ref/jobs/
 COPY secrets/ /usr/share/jenkins/ref/secrets/
 COPY configs/* /usr/share/jenkins/ref/
+
+COPY install-plugins.sh /usr/local/bin/
+COPY jenkins-support /usr/local/bin/
+RUN chmod 777 /usr/local/bin/install-plugins.sh
+RUN chmod 777 /usr/local/bin/jenkins-support
 
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
