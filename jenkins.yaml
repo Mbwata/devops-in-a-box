@@ -1,0 +1,76 @@
+---
+# Source: diab/templates/jenkins_namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+  labels:
+    app.kubernetes.io/name: jenkins
+    app.kubernetes.io/part-of: jenkins
+---
+# Source: diab/templates/jenkins_service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: deploy-jenkins
+    release: v1
+---
+# Source: diab/templates/jenkins_deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: deploy-jenkins
+    release: v1
+spec:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-jenkins
+      release: v1
+  template:
+    metadata:
+      labels:
+        app: deploy-jenkins
+        release: v1
+    spec:
+      containers:
+      - image: housems/jenkins-arm:2.222.1
+        imagePullPolicy: Always
+        name: deploy-jenkins
+        ports:
+        - containerPort: 8080
+---
+# Source: diab/templates/jenkins_ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins
+  namespace: jenkins
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  labels:
+    app: deploy-jenkins
+spec:
+  rules:
+  - host: jenkins.localhost
+    http:
+      paths:
+        - path: /([ ]*)(.*)
+          backend:
+            serviceName: jenkins
+            servicePort: 80

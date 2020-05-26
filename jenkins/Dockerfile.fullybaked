@@ -1,4 +1,4 @@
-FROM housems/diab_jenkins:halfbaked
+FROM housems/diab_jenkins:halfbakedarm
 
 COPY jobs/ /usr/share/jenkins/ref/jobs/
 COPY secrets/ /usr/share/jenkins/ref/secrets/
