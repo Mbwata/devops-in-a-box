@@ -1,6 +1,6 @@
 #FROM housems/diab_jenkins:halfbakedarm
 #FROM housems/jenkins-arm:2.222.1
-FROM jenkins-a
+FROM djdefi/rpi-jenkins
 
 USER root
 
