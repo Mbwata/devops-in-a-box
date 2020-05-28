@@ -20,6 +20,8 @@
 
 set -o pipefail
 
+REF="/usr/local/jenkins"
+
 JENKINS_UC="https://updates.jenkins.io/"
 
 JENKINS_WAR=${JENKINS_WAR:-/usr/share/jenkins/jenkins.war}
