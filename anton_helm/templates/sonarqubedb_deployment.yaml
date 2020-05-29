@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonardb
+  namespace: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonardb
+      release: v1
+  template:
+    metadata:
+      labels:
+        app: sonardb
+        release: v1
+    spec:
+      containers:
+      - image: {{ .Values.dierolldb.image }}
+        imagePullPolicy: Always
+        name: sonardb
+        ports:
+        - containerPort: 5432
+        env:
+          - name: POSTGRES_DB
+            value: sonar
+          - name: POSTGRES_USER
+            value: sonar
+          - name: POSTGRES_PASSWORD
+            value: passord

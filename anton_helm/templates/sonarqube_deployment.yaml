@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+      release: v1
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+        release: v1
+    spec:
+      containers:
+      - image: paperinik/rpi-sonarqube:latest   
+        imagePullPolicy: Always
+        name: sonarqube                
+        ports:
+        - containerPort: 9000
+        env:
+          - name: DB_USER
+            value: sonar
+          - name: DB_PASS
+            value: passord
+          - name: DB_NAME
+            value: sonar
+          - name: DB_HOST
+            value: sonardb:5532
+          - name: DB_TYPE
+            value: POSTGRES
